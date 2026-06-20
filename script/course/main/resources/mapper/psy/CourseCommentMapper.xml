@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.psy.mapper.CourseCommentMapper">
+    
+    <resultMap type="CourseComment" id="CourseCommentResult">
+        <result property="id"    column="id"    />
+        <result property="content"    column="content"    />
+        <result property="score"    column="score"    />
+        <result property="commentTime"    column="comment_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCourseCommentVo">
+        select id, content, score, comment_time, user_id, course_id, del_flag, create_by, create_time, update_by, update_time from course_comment
+    </sql>
+
+    <select id="selectCourseCommentList" parameterType="CourseComment" resultMap="CourseCommentResult">
+        <include refid="selectCourseCommentVo"/>
+        <where>  
+            <if test="score != null "> and score = #{score}</if>
+            <if test="params.beginCommentTime != null and params.beginCommentTime != '' and params.endCommentTime != null and params.endCommentTime != ''"> and comment_time between #{params.beginCommentTime} and #{params.endCommentTime}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCourseCommentById" parameterType="Long" resultMap="CourseCommentResult">
+        <include refid="selectCourseCommentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCourseComment" parameterType="CourseComment" useGeneratedKeys="true" keyProperty="id">
+        insert into course_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="content != null and content != ''">content,</if>
+            <if test="score != null">score,</if>
+            <if test="commentTime != null">comment_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="score != null">#{score},</if>
+            <if test="commentTime != null">#{commentTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCourseComment" parameterType="CourseComment">
+        update course_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="commentTime != null">comment_time = #{commentTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseCommentById" parameterType="Long">
+        delete from course_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteCourseCommentByIds" parameterType="String">
+        delete from course_comment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

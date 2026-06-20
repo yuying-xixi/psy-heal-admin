@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.psy.mapper.CourseMapper">
+    
+    <resultMap type="Course" id="CourseResult">
+        <result property="id"    column="id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="thumbnail"    column="thumbnail"    />
+        <result property="totalDuration"    column="total_duration"    />
+        <result property="videoCount"    column="video_count"    />
+        <result property="studyCount"    column="study_count"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="suitablePeople"    column="suitable_people"    />
+        <result property="learningHarvest"    column="learning_harvest"    />
+        <result property="subscriptionNotice"    column="subscription_notice"    />
+        <result property="originalPrice"    column="original_price"    />
+        <result property="discountPrice"    column="discount_price"    />
+        <result property="chargeType"    column="charge_type"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="mentorId"    column="mentor_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCourseVo">
+        select id, course_name, thumbnail, total_duration, video_count, study_count, introduction, suitable_people, learning_harvest, subscription_notice, original_price, discount_price, charge_type, category_id, mentor_id, del_flag, create_by, create_time, update_by, update_time from course
+    </sql>
+
+    <select id="selectCourseList" parameterType="Course" resultMap="CourseResult">
+        <include refid="selectCourseVo"/>
+        <where>  
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="studyCount != null "> and study_count &gt;= #{studyCount}</if>
+            <if test="chargeType != null "> and charge_type = #{chargeType}</if>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="mentorId != null "> and mentor_id = #{mentorId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCourseById" parameterType="Long" resultMap="CourseResult">
+        <include refid="selectCourseVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCourse" parameterType="Course" useGeneratedKeys="true" keyProperty="id">
+        insert into course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">course_name,</if>
+            <if test="thumbnail != null">thumbnail,</if>
+            <if test="totalDuration != null">total_duration,</if>
+            <if test="videoCount != null">video_count,</if>
+            <if test="studyCount != null">study_count,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="suitablePeople != null">suitable_people,</if>
+            <if test="learningHarvest != null">learning_harvest,</if>
+            <if test="subscriptionNotice != null">subscription_notice,</if>
+            <if test="originalPrice != null">original_price,</if>
+            <if test="discountPrice != null">discount_price,</if>
+            <if test="chargeType != null">charge_type,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="mentorId != null">mentor_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            <if test="thumbnail != null">#{thumbnail},</if>
+            <if test="totalDuration != null">#{totalDuration},</if>
+            <if test="videoCount != null">#{videoCount},</if>
+            <if test="studyCount != null">#{studyCount},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="suitablePeople != null">#{suitablePeople},</if>
+            <if test="learningHarvest != null">#{learningHarvest},</if>
+            <if test="subscriptionNotice != null">#{subscriptionNotice},</if>
+            <if test="originalPrice != null">#{originalPrice},</if>
+            <if test="discountPrice != null">#{discountPrice},</if>
+            <if test="chargeType != null">#{chargeType},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="mentorId != null">#{mentorId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCourse" parameterType="Course">
+        update course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">course_name = #{courseName},</if>
+            <if test="thumbnail != null">thumbnail = #{thumbnail},</if>
+            <if test="totalDuration != null">total_duration = #{totalDuration},</if>
+            <if test="videoCount != null">video_count = #{videoCount},</if>
+            <if test="studyCount != null">study_count = #{studyCount},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="suitablePeople != null">suitable_people = #{suitablePeople},</if>
+            <if test="learningHarvest != null">learning_harvest = #{learningHarvest},</if>
+            <if test="subscriptionNotice != null">subscription_notice = #{subscriptionNotice},</if>
+            <if test="originalPrice != null">original_price = #{originalPrice},</if>
+            <if test="discountPrice != null">discount_price = #{discountPrice},</if>
+            <if test="chargeType != null">charge_type = #{chargeType},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="mentorId != null">mentor_id = #{mentorId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseById" parameterType="Long">
+        delete from course where id = #{id}
+    </delete>
+
+    <delete id="deleteCourseByIds" parameterType="String">
+        delete from course where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

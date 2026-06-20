@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.psy.mapper.CourseOrderMapper">
+    
+    <resultMap type="CourseOrder" id="CourseOrderResult">
+        <result property="id"    column="id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCourseOrderVo">
+        select id, course_id, user_id, order_time, order_status, pay_amount, del_flag, create_by, create_time, update_by, update_time from course_order
+    </sql>
+
+    <select id="selectCourseOrderList" parameterType="CourseOrder" resultMap="CourseOrderResult">
+        <include refid="selectCourseOrderVo"/>
+        <where>  
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="params.beginOrderTime != null and params.beginOrderTime != '' and params.endOrderTime != null and params.endOrderTime != ''"> and order_time between #{params.beginOrderTime} and #{params.endOrderTime}</if>
+            <if test="orderStatus != null "> and order_status = #{orderStatus}</if>
+            <if test="payAmount != null "> and pay_amount = #{payAmount}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCourseOrderById" parameterType="Long" resultMap="CourseOrderResult">
+        <include refid="selectCourseOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCourseOrder" parameterType="CourseOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into course_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">course_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="orderTime != null">order_time,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">#{courseId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="orderTime != null">#{orderTime},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCourseOrder" parameterType="CourseOrder">
+        update course_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="orderTime != null">order_time = #{orderTime},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseOrderById" parameterType="Long">
+        delete from course_order where id = #{id}
+    </delete>
+
+    <delete id="deleteCourseOrderByIds" parameterType="String">
+        delete from course_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

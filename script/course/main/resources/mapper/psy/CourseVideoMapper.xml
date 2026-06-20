@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.psy.mapper.CourseVideoMapper">
+    
+    <resultMap type="CourseVideo" id="CourseVideoResult">
+        <result property="id"    column="id"    />
+        <result property="videoName"    column="video_name"    />
+        <result property="duration"    column="duration"    />
+        <result property="videoUrl"    column="video_url"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCourseVideoVo">
+        select id, video_name, duration, video_url, course_id, del_flag, create_by, create_time, update_by, update_time from course_video
+    </sql>
+
+    <select id="selectCourseVideoList" parameterType="CourseVideo" resultMap="CourseVideoResult">
+        <include refid="selectCourseVideoVo"/>
+        <where>  
+            <if test="videoName != null  and videoName != ''"> and video_name like concat('%', #{videoName}, '%')</if>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCourseVideoById" parameterType="Long" resultMap="CourseVideoResult">
+        <include refid="selectCourseVideoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCourseVideo" parameterType="CourseVideo" useGeneratedKeys="true" keyProperty="id">
+        insert into course_video
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="videoName != null and videoName != ''">video_name,</if>
+            <if test="duration != null">duration,</if>
+            <if test="videoUrl != null and videoUrl != ''">video_url,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="videoName != null and videoName != ''">#{videoName},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="videoUrl != null and videoUrl != ''">#{videoUrl},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCourseVideo" parameterType="CourseVideo">
+        update course_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="videoName != null and videoName != ''">video_name = #{videoName},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="videoUrl != null and videoUrl != ''">video_url = #{videoUrl},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseVideoById" parameterType="Long">
+        delete from course_video where id = #{id}
+    </delete>
+
+    <delete id="deleteCourseVideoByIds" parameterType="String">
+        delete from course_video where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
