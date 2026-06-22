@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.consult.mapper.ConsultGoodAtRelMapper">
+    
+    <resultMap type="ConsultGoodAtRel" id="ConsultGoodAtRelResult">
+        <result property="id"    column="id"    />
+        <result property="consultId"    column="consult_id"    />
+        <result property="fieldId"    column="field_id"    />
+    </resultMap>
+
+    <sql id="selectConsultGoodAtRelVo">
+        select id, consult_id, field_id from consult_good_at_rel
+    </sql>
+
+    <select id="selectConsultGoodAtRelList" parameterType="ConsultGoodAtRel" resultMap="ConsultGoodAtRelResult">
+        <include refid="selectConsultGoodAtRelVo"/>
+        <where>  
+            <if test="consultId != null "> and consult_id like concat('%', #{consultId}, '%')</if>
+            <if test="fieldId != null "> and field_id like concat('%', #{fieldId}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectConsultGoodAtRelById" parameterType="Long" resultMap="ConsultGoodAtRelResult">
+        <include refid="selectConsultGoodAtRelVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertConsultGoodAtRel" parameterType="ConsultGoodAtRel" useGeneratedKeys="true" keyProperty="id">
+        insert into consult_good_at_rel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="consultId != null">consult_id,</if>
+            <if test="fieldId != null">field_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="consultId != null">#{consultId},</if>
+            <if test="fieldId != null">#{fieldId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsultGoodAtRel" parameterType="ConsultGoodAtRel">
+        update consult_good_at_rel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="consultId != null">consult_id = #{consultId},</if>
+            <if test="fieldId != null">field_id = #{fieldId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConsultGoodAtRelById" parameterType="Long">
+        delete from consult_good_at_rel where id = #{id}
+    </delete>
+
+    <delete id="deleteConsultGoodAtRelByIds" parameterType="String">
+        delete from consult_good_at_rel where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

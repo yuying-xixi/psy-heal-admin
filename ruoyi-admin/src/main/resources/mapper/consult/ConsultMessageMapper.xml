@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.consult.mapper.ConsultMessageMapper">
+    
+    <resultMap type="ConsultMessage" id="ConsultMessageResult">
+        <result property="id"    column="id"    />
+        <result property="content"    column="content"    />
+        <result property="reply"    column="reply"    />
+        <result property="replyTime"    column="reply_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="consultId"    column="consult_id"    />
+        <result property="messageTime"    column="message_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectConsultMessageVo">
+        select id, content, reply, reply_time, user_id, consult_id, message_time, del_flag, create_by, create_time, update_by, update_time from consult_message
+    </sql>
+
+    <select id="selectConsultMessageList" parameterType="ConsultMessage" resultMap="ConsultMessageResult">
+        <include refid="selectConsultMessageVo"/>
+        <where>  
+            <if test="params.beginReplyTime != null and params.beginReplyTime != '' and params.endReplyTime != null and params.endReplyTime != ''"> and reply_time between #{params.beginReplyTime} and #{params.endReplyTime}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="consultId != null "> and consult_id = #{consultId}</if>
+            <if test="messageTime != null "> and message_time = #{messageTime}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectConsultMessageById" parameterType="Long" resultMap="ConsultMessageResult">
+        <include refid="selectConsultMessageVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertConsultMessage" parameterType="ConsultMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into consult_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="content != null">content,</if>
+            <if test="reply != null">reply,</if>
+            <if test="replyTime != null">reply_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="consultId != null">consult_id,</if>
+            <if test="messageTime != null">message_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="content != null">#{content},</if>
+            <if test="reply != null">#{reply},</if>
+            <if test="replyTime != null">#{replyTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="consultId != null">#{consultId},</if>
+            <if test="messageTime != null">#{messageTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsultMessage" parameterType="ConsultMessage">
+        update consult_message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="content != null">content = #{content},</if>
+            <if test="reply != null">reply = #{reply},</if>
+            <if test="replyTime != null">reply_time = #{replyTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="consultId != null">consult_id = #{consultId},</if>
+            <if test="messageTime != null">message_time = #{messageTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConsultMessageById" parameterType="Long">
+        delete from consult_message where id = #{id}
+    </delete>
+
+    <delete id="deleteConsultMessageByIds" parameterType="String">
+        delete from consult_message where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

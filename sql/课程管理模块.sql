@@ -1,7 +1,5 @@
 /*
- Navicat Premium Data Transfer
-
- 课程系统数据库表
+ 课程管理模块数据库表
  Author : 雨影熙熙
  Date   : 2026-06
 */

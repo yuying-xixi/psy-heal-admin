@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.consult.mapper.ConsultMapper">
+    
+    <resultMap type="Consult" id="ConsultResult">
+        <result property="id"    column="id"    />
+        <result property="sysUserId"    column="sys_user_id"    />
+        <result property="name"    column="name"    />
+        <result property="levelId"    column="level_id"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="email"    column="email"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="gender"    column="gender"    />
+        <result property="certImg"    column="cert_img"    />
+        <result property="address"    column="address"    />
+        <result property="intro"    column="intro"    />
+        <result property="position"    column="position"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectConsultVo">
+        select id, sys_user_id, name, level_id, mobile, email, avatar, gender, cert_img, address, intro, position, del_flag, create_by, create_time, update_by, update_time from consult
+    </sql>
+
+    <select id="selectConsultList" parameterType="Consult" resultMap="ConsultResult">
+        <include refid="selectConsultVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="levelId != null "> and level_id = #{levelId}</if>
+            <if test="mobile != null  and mobile != ''"> and mobile like concat('%', #{mobile}, '%')</if>
+            <if test="email != null  and email != ''"> and email like concat('%', #{email}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
+            <if test="position != null "> and position = #{position}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectConsultById" parameterType="Long" resultMap="ConsultResult">
+        <include refid="selectConsultVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertConsult" parameterType="Consult" useGeneratedKeys="true" keyProperty="id">
+        insert into consult
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sysUserId != null">sys_user_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="levelId != null">level_id,</if>
+            <if test="mobile != null and mobile != ''">mobile,</if>
+            <if test="email != null">email,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="gender != null and gender != ''">gender,</if>
+            <if test="certImg != null">cert_img,</if>
+            <if test="address != null">address,</if>
+            <if test="intro != null">intro,</if>
+            <if test="position != null">position,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sysUserId != null">#{sysUserId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="levelId != null">#{levelId},</if>
+            <if test="mobile != null and mobile != ''">#{mobile},</if>
+            <if test="email != null">#{email},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="certImg != null">#{certImg},</if>
+            <if test="address != null">#{address},</if>
+            <if test="intro != null">#{intro},</if>
+            <if test="position != null">#{position},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsult" parameterType="Consult">
+        update consult
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="levelId != null">level_id = #{levelId},</if>
+            <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="certImg != null">cert_img = #{certImg},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="intro != null">intro = #{intro},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConsultById" parameterType="Long">
+        delete from consult where id = #{id}
+    </delete>
+
+    <delete id="deleteConsultByIds" parameterType="String">
+        delete from consult where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

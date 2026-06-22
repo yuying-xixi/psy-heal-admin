@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.consult.mapper.ConsultChargeStandardMapper">
+    
+    <resultMap type="ConsultChargeStandard" id="ConsultChargeStandardResult">
+        <result property="id"    column="id"    />
+        <result property="chargeTypeId"    column="charge_type_id"    />
+        <result property="consultId"    column="consult_id"    />
+        <result property="price"    column="price"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectConsultChargeStandardVo">
+        select id, charge_type_id, consult_id, price, del_flag, create_by, create_time, update_by, update_time from consult_charge_standard
+    </sql>
+
+    <select id="selectConsultChargeStandardList" parameterType="ConsultChargeStandard" resultMap="ConsultChargeStandardResult">
+        <include refid="selectConsultChargeStandardVo"/>
+        <where>  
+            <if test="chargeTypeId != null "> and charge_type_id = #{chargeTypeId}</if>
+            <if test="consultId != null "> and consult_id = #{consultId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectConsultChargeStandardById" parameterType="Long" resultMap="ConsultChargeStandardResult">
+        <include refid="selectConsultChargeStandardVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertConsultChargeStandard" parameterType="ConsultChargeStandard" useGeneratedKeys="true" keyProperty="id">
+        insert into consult_charge_standard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chargeTypeId != null">charge_type_id,</if>
+            <if test="consultId != null">consult_id,</if>
+            <if test="price != null">price,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chargeTypeId != null">#{chargeTypeId},</if>
+            <if test="consultId != null">#{consultId},</if>
+            <if test="price != null">#{price},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsultChargeStandard" parameterType="ConsultChargeStandard">
+        update consult_charge_standard
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chargeTypeId != null">charge_type_id = #{chargeTypeId},</if>
+            <if test="consultId != null">consult_id = #{consultId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConsultChargeStandardById" parameterType="Long">
+        delete from consult_charge_standard where id = #{id}
+    </delete>
+
+    <delete id="deleteConsultChargeStandardByIds" parameterType="String">
+        delete from consult_charge_standard where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

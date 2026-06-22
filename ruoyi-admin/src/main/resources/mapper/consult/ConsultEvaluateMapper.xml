@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.consult.mapper.ConsultEvaluateMapper">
+    
+    <resultMap type="ConsultEvaluate" id="ConsultEvaluateResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="content"    column="content"    />
+        <result property="score"    column="score"    />
+        <result property="evaluateTime"    column="evaluate_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="consultId"    column="consult_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectConsultEvaluateVo">
+        select id, order_id, content, score, evaluate_time, user_id, consult_id, del_flag, create_by, create_time, update_by, update_time from consult_evaluate
+    </sql>
+
+    <select id="selectConsultEvaluateList" parameterType="ConsultEvaluate" resultMap="ConsultEvaluateResult">
+        <include refid="selectConsultEvaluateVo"/>
+        <where>  
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="params.beginEvaluateTime != null and params.beginEvaluateTime != '' and params.endEvaluateTime != null and params.endEvaluateTime != ''"> and evaluate_time between #{params.beginEvaluateTime} and #{params.endEvaluateTime}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="consultId != null "> and consult_id = #{consultId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectConsultEvaluateById" parameterType="Long" resultMap="ConsultEvaluateResult">
+        <include refid="selectConsultEvaluateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertConsultEvaluate" parameterType="ConsultEvaluate" useGeneratedKeys="true" keyProperty="id">
+        insert into consult_evaluate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="content != null">content,</if>
+            <if test="score != null">score,</if>
+            <if test="evaluateTime != null">evaluate_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="consultId != null">consult_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="score != null">#{score},</if>
+            <if test="evaluateTime != null">#{evaluateTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="consultId != null">#{consultId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsultEvaluate" parameterType="ConsultEvaluate">
+        update consult_evaluate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="evaluateTime != null">evaluate_time = #{evaluateTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="consultId != null">consult_id = #{consultId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConsultEvaluateById" parameterType="Long">
+        delete from consult_evaluate where id = #{id}
+    </delete>
+
+    <delete id="deleteConsultEvaluateByIds" parameterType="String">
+        delete from consult_evaluate where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

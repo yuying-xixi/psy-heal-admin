@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.consult.mapper.ConsultOrderMapper">
+    
+    <resultMap type="ConsultOrder" id="ConsultOrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="chargeStandardId"    column="charge_standard_id"    />
+        <result property="consultId"    column="consult_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="appointTime"    column="appoint_time"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="finishTime"    column="finish_time"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="problemDesc"    column="problem_desc"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectConsultOrderVo">
+        select id, order_no, charge_standard_id, consult_id, user_id, order_time, appoint_time, pay_time, finish_time, pay_amount, problem_desc, order_status, del_flag, create_by, create_time, update_by, update_time from consult_order
+    </sql>
+
+    <select id="selectConsultOrderList" parameterType="ConsultOrder" resultMap="ConsultOrderResult">
+        <include refid="selectConsultOrderVo"/>
+        <where>  
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="chargeStandardId != null "> and charge_standard_id = #{chargeStandardId}</if>
+            <if test="consultId != null "> and consult_id = #{consultId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="params.beginOrderTime != null and params.beginOrderTime != '' and params.endOrderTime != null and params.endOrderTime != ''"> and order_time between #{params.beginOrderTime} and #{params.endOrderTime}</if>
+            <if test="params.beginAppointTime != null and params.beginAppointTime != '' and params.endAppointTime != null and params.endAppointTime != ''"> and appoint_time between #{params.beginAppointTime} and #{params.endAppointTime}</if>
+            <if test="params.beginPayTime != null and params.beginPayTime != '' and params.endPayTime != null and params.endPayTime != ''"> and pay_time between #{params.beginPayTime} and #{params.endPayTime}</if>
+            <if test="params.beginFinishTime != null and params.beginFinishTime != '' and params.endFinishTime != null and params.endFinishTime != ''"> and finish_time between #{params.beginFinishTime} and #{params.endFinishTime}</if>
+            <if test="orderStatus != null "> and order_status = #{orderStatus}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectConsultOrderById" parameterType="Long" resultMap="ConsultOrderResult">
+        <include refid="selectConsultOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertConsultOrder" parameterType="ConsultOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into consult_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">order_no,</if>
+            <if test="chargeStandardId != null">charge_standard_id,</if>
+            <if test="consultId != null">consult_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="orderTime != null">order_time,</if>
+            <if test="appointTime != null">appoint_time,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="finishTime != null">finish_time,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="problemDesc != null">problem_desc,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="chargeStandardId != null">#{chargeStandardId},</if>
+            <if test="consultId != null">#{consultId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="orderTime != null">#{orderTime},</if>
+            <if test="appointTime != null">#{appointTime},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="finishTime != null">#{finishTime},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="problemDesc != null">#{problemDesc},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsultOrder" parameterType="ConsultOrder">
+        update consult_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="chargeStandardId != null">charge_standard_id = #{chargeStandardId},</if>
+            <if test="consultId != null">consult_id = #{consultId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="orderTime != null">order_time = #{orderTime},</if>
+            <if test="appointTime != null">appoint_time = #{appointTime},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="problemDesc != null">problem_desc = #{problemDesc},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConsultOrderById" parameterType="Long">
+        delete from consult_order where id = #{id}
+    </delete>
+
+    <delete id="deleteConsultOrderByIds" parameterType="String">
+        delete from consult_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
