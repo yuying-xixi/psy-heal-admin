@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assessment.mapper.AssessmentQuestionMapper">
+    
+    <resultMap type="AssessmentQuestion" id="AssessmentQuestionResult">
+        <result property="id"    column="id"    />
+        <result property="questionName"    column="question_name"    />
+        <result property="assessmentId"    column="assessment_id"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAssessmentQuestionVo">
+        select id, question_name, assessment_id, sort_order, del_flag, create_by, create_time, update_by, update_time from assessment_question
+    </sql>
+
+    <select id="selectAssessmentQuestionList" parameterType="AssessmentQuestion" resultMap="AssessmentQuestionResult">
+        <include refid="selectAssessmentQuestionVo"/>
+        <where>  
+            <if test="questionName != null  and questionName != ''"> and question_name like concat('%', #{questionName}, '%')</if>
+            <if test="assessmentId != null "> and assessment_id = #{assessmentId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAssessmentQuestionById" parameterType="Long" resultMap="AssessmentQuestionResult">
+        <include refid="selectAssessmentQuestionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAssessmentQuestion" parameterType="AssessmentQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into assessment_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="questionName != null and questionName != ''">question_name,</if>
+            <if test="assessmentId != null">assessment_id,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="questionName != null and questionName != ''">#{questionName},</if>
+            <if test="assessmentId != null">#{assessmentId},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAssessmentQuestion" parameterType="AssessmentQuestion">
+        update assessment_question
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="questionName != null and questionName != ''">question_name = #{questionName},</if>
+            <if test="assessmentId != null">assessment_id = #{assessmentId},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAssessmentQuestionById" parameterType="Long">
+        delete from assessment_question where id = #{id}
+    </delete>
+
+    <delete id="deleteAssessmentQuestionByIds" parameterType="String">
+        delete from assessment_question where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
