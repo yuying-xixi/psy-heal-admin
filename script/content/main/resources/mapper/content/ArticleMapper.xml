@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.content.mapper.ArticleMapper">
+    
+    <resultMap type="Article" id="ArticleResult">
+        <result property="id"    column="id"    />
+        <result property="articleName"    column="article_name"    />
+        <result property="articleIntro"    column="article_intro"    />
+        <result property="mentorId"    column="mentor_id"    />
+        <result property="thumbnail"    column="thumbnail"    />
+        <result property="content"    column="content"    />
+        <result property="readCount"    column="read_count"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectArticleVo">
+        select id, article_name, article_intro, mentor_id, thumbnail, content, read_count, category_id, status, del_flag, create_by, create_time, update_by, update_time from article
+    </sql>
+
+    <select id="selectArticleList" parameterType="Article" resultMap="ArticleResult">
+        <include refid="selectArticleVo"/>
+        <where>  
+            <if test="articleName != null  and articleName != ''"> and article_name like concat('%', #{articleName}, '%')</if>
+            <if test="mentorId != null "> and mentor_id = #{mentorId}</if>
+            <if test="readCount != null "> and read_count &gt;= #{readCount}</if>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectArticleById" parameterType="Long" resultMap="ArticleResult">
+        <include refid="selectArticleVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
+        insert into article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleName != null and articleName != ''">article_name,</if>
+            <if test="articleIntro != null">article_intro,</if>
+            <if test="mentorId != null">mentor_id,</if>
+            <if test="thumbnail != null">thumbnail,</if>
+            <if test="content != null">content,</if>
+            <if test="readCount != null">read_count,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleName != null and articleName != ''">#{articleName},</if>
+            <if test="articleIntro != null">#{articleIntro},</if>
+            <if test="mentorId != null">#{mentorId},</if>
+            <if test="thumbnail != null">#{thumbnail},</if>
+            <if test="content != null">#{content},</if>
+            <if test="readCount != null">#{readCount},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArticle" parameterType="Article">
+        update article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="articleName != null and articleName != ''">article_name = #{articleName},</if>
+            <if test="articleIntro != null">article_intro = #{articleIntro},</if>
+            <if test="mentorId != null">mentor_id = #{mentorId},</if>
+            <if test="thumbnail != null">thumbnail = #{thumbnail},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="readCount != null">read_count = #{readCount},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteArticleById" parameterType="Long">
+        delete from article where id = #{id}
+    </delete>
+
+    <delete id="deleteArticleByIds" parameterType="String">
+        delete from article where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

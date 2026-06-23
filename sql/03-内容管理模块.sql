@@ -27,13 +27,6 @@ CREATE TABLE `article_category` (
                                     UNIQUE KEY `uk_category_name` (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章分类表';
 
--- 初始化文章分类
-INSERT INTO `article_category` (`category_name`) VALUES
-                                                     ('心理咨询'),
-                                                     ('缓解焦虑'),
-                                                     ('情感危机'),
-                                                     ('改善人际'),
-                                                     ('个人成长');
 
 -- ----------------------------
 -- 2、文章表
@@ -103,13 +96,6 @@ CREATE TABLE `fm_category` (
                                UNIQUE KEY `uk_category_name` (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='FM分类表';
 
--- 初始化FM分类
-INSERT INTO `fm_category` (`category_name`) VALUES
-                                                ('咨询师培训'),
-                                                ('智慧生活'),
-                                                ('素质教育'),
-                                                ('身心健康'),
-                                                ('免费公开课');
 
 -- ----------------------------
 -- 5、FM表

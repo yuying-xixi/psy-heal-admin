@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.content.mapper.PublicWelfareMapper">
+    
+    <resultMap type="PublicWelfare" id="PublicWelfareResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="intro"    column="intro"    />
+        <result property="thumbnail"    column="thumbnail"    />
+        <result property="content"    column="content"    />
+        <result property="mentorId"    column="mentor_id"    />
+        <result property="readCount"    column="read_count"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPublicWelfareVo">
+        select id, title, intro, thumbnail, content, mentor_id, read_count, del_flag, create_by, create_time, update_by, update_time from public_welfare
+    </sql>
+
+    <select id="selectPublicWelfareList" parameterType="PublicWelfare" resultMap="PublicWelfareResult">
+        <include refid="selectPublicWelfareVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="intro != null  and intro != ''"> and intro = #{intro}</if>
+            <if test="thumbnail != null  and thumbnail != ''"> and thumbnail = #{thumbnail}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="mentorId != null "> and mentor_id = #{mentorId}</if>
+            <if test="readCount != null "> and read_count &gt;= #{readCount}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectPublicWelfareById" parameterType="Long" resultMap="PublicWelfareResult">
+        <include refid="selectPublicWelfareVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPublicWelfare" parameterType="PublicWelfare" useGeneratedKeys="true" keyProperty="id">
+        insert into public_welfare
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="intro != null">intro,</if>
+            <if test="thumbnail != null">thumbnail,</if>
+            <if test="content != null">content,</if>
+            <if test="mentorId != null">mentor_id,</if>
+            <if test="readCount != null">read_count,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="intro != null">#{intro},</if>
+            <if test="thumbnail != null">#{thumbnail},</if>
+            <if test="content != null">#{content},</if>
+            <if test="mentorId != null">#{mentorId},</if>
+            <if test="readCount != null">#{readCount},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePublicWelfare" parameterType="PublicWelfare">
+        update public_welfare
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="intro != null">intro = #{intro},</if>
+            <if test="thumbnail != null">thumbnail = #{thumbnail},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="mentorId != null">mentor_id = #{mentorId},</if>
+            <if test="readCount != null">read_count = #{readCount},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePublicWelfareById" parameterType="Long">
+        delete from public_welfare where id = #{id}
+    </delete>
+
+    <delete id="deletePublicWelfareByIds" parameterType="String">
+        delete from public_welfare where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
