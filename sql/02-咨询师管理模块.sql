@@ -24,12 +24,6 @@ CREATE TABLE `consult_level` (
                                  UNIQUE KEY `uk_level_name` (`level_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='咨询师等级';
 
--- 初始化等级数据
-INSERT INTO `consult_level` (`level_name`) VALUES
-                                               ('一级咨询师'),
-                                               ('二级咨询师'),
-                                               ('三级咨询师');
-
 -- ----------------------------
 -- 2、咨询师表
 -- ----------------------------
@@ -72,16 +66,6 @@ CREATE TABLE `consult_good_at` (
                                    UNIQUE KEY `uk_field` (`field_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='擅长领域';
 
--- 初始化擅长领域
-INSERT INTO `consult_good_at` (`field_name`) VALUES
-                                                 ('情绪管理'),
-                                                 ('人际关系'),
-                                                 ('婚姻家庭'),
-                                                 ('职业规划'),
-                                                 ('儿童心理'),
-                                                 ('青少年心理'),
-                                                 ('老年心理'),
-                                                 ('危机干预');
 
 -- ----------------------------
 -- 4、咨询师擅长关联
@@ -111,12 +95,6 @@ CREATE TABLE `consult_charge_type` (
                                        UNIQUE KEY `uk_type` (`type_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='收费类型';
 
--- 初始化收费类型
-INSERT INTO `consult_charge_type` (`type_name`) VALUES
-                                                    ('语音咨询'),
-                                                    ('视频咨询'),
-                                                    ('线下咨询'),
-                                                    ('上门咨询');
 
 -- ----------------------------
 -- 6、收费标准
